@@ -40,6 +40,26 @@ void UpdateCurrent(char* answer, char* current, char guess) {
 	}
 }
 
+void UpdateMan(int size, char man[100]) {
+	if (size == 5) {
+		man[25] = '_';
+		man[24] = '(';
+		man[26] = ')';
+	}
+	else if (size == 4) {
+		man[35] = '|';
+		man[45] = '|';
+	}
+	else if (size == 3)
+		man[34] = '\\';
+	else if (size == 2)
+		man[36] = '/';
+	else if (size == 1)
+		man[53] = '/';
+	else
+		man[55] = '\\';
+}
+
 int main(int argc, char *argv[]) {
 	char* answer;
 	char* hint;
@@ -48,7 +68,7 @@ int main(int argc, char *argv[]) {
 	char guess;
 	int tries = 6;
 	bool won = false;
-
+	char hangman[74] = "\n  _____\n |/    |\n |       \n |       \n |      \n |       \n |      \n_|__";
 	if (argc < 3) {
 		fprintf(stderr, "Usage: %s Word Hint\n", argv[0]);
 		exit(-1);
@@ -100,6 +120,7 @@ int main(int argc, char *argv[]) {
 						UpdateCurrent(answer, current, guess);
 					} else {
 						tries--;
+						UpdateMan(tries, hangman);
 					}
 					if (NumUnderScores(current) == 0) {
 						won = true;
@@ -107,6 +128,7 @@ int main(int argc, char *argv[]) {
 					letters[guess - 65] = guess;
 				}
 			}
+			printf("%s\n\n",hangman);
 			printf("%s\n", current);
 			printf("Hint: %s\n", hint);
 			printf("Misses left: %d\n", tries);
